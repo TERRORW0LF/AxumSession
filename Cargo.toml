@@ -55,7 +55,7 @@ time = { version = "0.3.55", features = ["serde"] }
 
 
 [workspace.dependencies]
-axum_session = { version = "0.22.0", path = "./" }
+axum_session = "0.22.0"
 time = { version = "0.3.55", features = ["serde"] } 
 async-trait = "0.1.89"
 tokio = { version = "1.54.1", features = ["full", "tracing"] }
