@@ -26,20 +26,6 @@ impl From<Pool<Postgres>> for SessionPgPool {
 #[async_trait]
 impl DatabasePool for SessionPgPool {
     async fn initiate(&self, table_name: &str) -> Result<(), DatabaseError> {
-        sqlx::query(AssertSqlSafe(
-            r#"
-            CREATE TABLE IF NOT EXISTS %%TABLE_NAME%% (
-                "id" VARCHAR(128) NOT NULL PRIMARY KEY,
-                "expires" BIGINT NULL,
-                "session" TEXT NOT NULL
-            )
-        "#
-            .replace("%%TABLE_NAME%%", table_name),
-        ))
-        .execute(&self.pool)
-        .await
-        .map_err(|err| DatabaseError::GenericCreateError(err.to_string()))?;
-
         let (t,): (bool,) = sqlx::query_as(AssertSqlSafe(
             r#"
             SELECT data_type = 'integer'
